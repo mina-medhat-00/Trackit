@@ -66,10 +66,33 @@ Scan the QR code with the **Expo Go app** to run it on your device.
 This project uses **Expo’s built-in libraries** only.
 No external UI frameworks were required.
 
+## Project Structure
+
+```
+Trackit/
+├── app/
+│   └── index.tsx                     # Main application logic and state management
+│
+├── components/
+│   ├── AddTaskModal.tsx              # Task creation form
+│   └── EditTaskModal.tsx             # Task edit
+│
+├── types/
+│   └── task.ts                       # TypeScript type definitions
+│
+├── styles/
+│   └── styles.ts                     # Shared styling
+│
+├── assets/
+│   ├── fonts/                        # Fonts files
+|   ├── images/                       # Images and icons
+│   └── preview/                      # Preview files for screenshots
+```
+
 ---
 
 ## Preview
 
-![Preview](./assets/preview//preview-2.png)
 ![Preview](./assets/preview//preview-1.png)
+![Preview](./assets/preview//preview-2.png)
 ![Preview](./assets/preview//preview-3.png)
