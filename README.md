@@ -23,7 +23,7 @@ Make sure you have the following installed:
 
 ```bash
 git clone <your-repo-url>
-cd task-manager
+cd Trackit
 ```
 
 ### 3. Install Dependencies
