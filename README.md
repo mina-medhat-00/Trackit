@@ -1,50 +1,71 @@
-# Welcome to your Expo app 👋
+# Trackit (React Native + Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Objective
 
-## Get started
+This project is a **basic Task Manager app** built with **React Native** and **Expo**.  
+The app allows users to:
 
-1. Install dependencies
+- Add new tasks
+- Mark tasks as complete
+- Delete tasks
 
-   ```bash
-   npm install
-   ```
+## Getting Started
 
-2. Start the app
+### 1. Prerequisites
 
-   ```bash
-   npx expo start
-   ```
+Make sure you have the following installed:
 
-In the output, you'll find options to open the app in a
+- [Node.js (LTS recommended)](https://nodejs.org/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/) (optional, you can also use `npx`)
+- **Expo Go app** on your iOS or Android device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 2. Clone the Repository
 
 ```bash
-npm run reset-project
+git clone <your-repo-url>
+cd task-manager
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 3. Install Dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 4. Run the App
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm start
+```
 
-## Join the community
+(or `npx expo start`)
 
-Join our community of developers creating universal apps.
+Scan the QR code with the **Expo Go app** to run it on your device.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+## Features
+
+- **Add Task**: Enter a description and add it to the list.
+- **Mark Task as Complete**: Tap a task to toggle its completion state.
+- **Delete Task**: Remove a task permanently from the list.
+- **Task List**: Displays all tasks, with visual distinction between complete and incomplete ones.
+
+---
+
+## Documentation
+
+### Project Setup
+
+- Expo was used to bootstrap the project for faster development.
+- You can also find other templates in the official React Native docs:
+  [React Native Quickstart Guide](https://reactnative.dev/docs/environment-setup?guide=quickstart)
+
+### Third-Party Libraries
+
+This project uses **Expo’s built-in libraries** only.
+No external UI frameworks were required.
+
+---
+
+## Preview
