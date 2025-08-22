@@ -69,3 +69,7 @@ No external UI frameworks were required.
 ---
 
 ## Preview
+
+![Preview](./assets/preview//preview-2.png)
+![Preview](./assets/preview//preview-1.png)
+![Preview](./assets/preview//preview-3.png)

@@ -1,36 +1,53 @@
+import AddTaskModal from "@/components/AddTaskModal";
+import EditTaskModal from "@/components/EditTaskModal";
+import styles from "@/styles/styles";
+import { Task } from "@/types/task";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Button,
   FlatList,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
-interface Task {
-  id: string;
-  text: string;
-  completed: boolean;
-}
-
+/**
+ * Main component
+ * Manages the list of tasks, including adding, editing, deleting, toggling completion, and searching.
+ * 
+ * @component
+ * 
+ * @state tasks - Array of Task objects representing the current tasks.
+ * @state addVisible - Controls visibility of the Add Task modal.
+ * @state editVisible - Controls visibility of the Edit Task modal.
+ * @state editingTask - The Task currently being edited, or null.
+ * @state search - Search query string for filtering tasks by title.
+ * 
+ * @returns {JSX.Element} The rendered Trackit app UI.
+ */
 export default function Index() {
-  const [task, setTask] = useState<string>("");
-  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const addTask = () => {
-    if (task.trim().length > 0) {
-      const newTask: Task = {
-        id: Date.now().toString(),
-        text: task,
-        completed: false,
-      };
-      setTasks((prev) => [...prev, newTask]);
-      setTask("");
-    }
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [addVisible, setAddVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [search, setSearch] = useState("");
+
+  const handleAddTask = (title: string, description: string) => {
+    const newTask: Task = {
+      id: crypto.randomUUID(),
+      title,
+      description,
+      completed: false,
+      createdAt: new Date(),
+    };
+    setTasks((prev) => [...prev, newTask]);
+    setAddVisible(false);
   };
 
+  // update status by clicking on task
   const toggleTask = (id: string) => {
     setTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
@@ -41,93 +58,103 @@ export default function Index() {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const openEditModal = (task: Task) => {
+    setEditingTask(task);
+    setEditVisible(true);
+  };
+
+  const handleSaveEdit = (id: string, title: string, description: string) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, title, description } : t))
+    );
+    setEditVisible(false);
+    setEditingTask(null);
+  };
+
+  // Filter tasks by search in title
+  const filteredTasks = tasks.filter((t) =>
+    t.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Task Manager</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Trackit</Text>
+        <Button title="Add Task" onPress={() => setAddVisible(true)} />
+      </View>
 
-      {/* Input + Add Button */}
-      <View style={styles.inputContainer}>
+      {/* Search Bar */}
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={20} color="#888" />
         <TextInput
-          style={styles.input}
-          placeholder="Enter a task"
+          style={styles.searchInput}
+          placeholder="Search tasks..."
           placeholderTextColor="#888"
-          value={task}
-          onChangeText={setTask}
+          value={search}
+          onChangeText={setSearch}
         />
-        <Button title="Add" onPress={addTask} color="#4CAF50" />
       </View>
 
       {/* Task List */}
       <FlatList
-        data={tasks}
+        data={filteredTasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.taskContainer}>
             <TouchableOpacity
               onPress={() => toggleTask(item.id)}
-              style={{ flex: 1, pointerEvents: "auto" }}
+              style={{ flex: 1 }}
             >
               <Text
-                style={[styles.taskText, item.completed && styles.completed]}
+                style={[styles.taskTitle, item.completed && styles.completed]}
               >
-                {item.text}
+                {item.title}
+              </Text>
+              {item.description ? (
+                <Text style={styles.taskDescription}>{item.description}</Text>
+              ) : null}
+              <Text style={styles.dateText}>
+                Created: {new Date(item.createdAt).toLocaleString()}
               </Text>
             </TouchableOpacity>
-            <Button
-              title="Delete"
-              onPress={() => deleteTask(item.id)}
-              color="#E53935"
-            />
+            <View style={{ flexDirection: "row", gap: 5 }}>
+              <Button
+                title="Edit"
+                onPress={() => openEditModal(item)}
+                color="orange"
+              />
+              <Button
+                title="Delete"
+                onPress={() => deleteTask(item.id)}
+                color="red"
+              />
+            </View>
           </View>
         )}
+      />
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          {tasks.length} total • {tasks.filter((t) => !t.completed).length} left
+        </Text>
+      </View>
+
+      {/* Modals */}
+      <AddTaskModal
+        visible={addVisible}
+        onClose={() => setAddVisible(false)}
+        onAddTask={handleAddTask}
+        styles={styles}
+      />
+      <EditTaskModal
+        visible={editVisible}
+        task={editingTask}
+        onClose={() => setEditVisible(false)}
+        onSave={handleSaveEdit}
+        styles={styles}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#121212", // dark background
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-    color: "#fff",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#333",
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 10,
-    backgroundColor: "#1e1e1e",
-    color: "#fff",
-  },
-  taskContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#1f1f1f",
-    padding: 15,
-    marginVertical: 5,
-    borderRadius: 8,
-    boxShadow: "0px 2px 4px rgba(0,0,0,0.7)",
-  },
-  taskText: {
-    fontSize: 16,
-    color: "#fff",
-  },
-  completed: {
-    textDecorationLine: "line-through",
-    color: "#888",
-  },
-});
